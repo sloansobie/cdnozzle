@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>CD Nozzle Generator</title>
+</head>
+<body>
+    <h1> Coverging-Diverging Nozzle Generator</h1>
+    <p>
+        This website designs the optimal conveging-diverging nozzle for any rocket using the parameters below.
+        These calculations are theoretical, so don't take them to seriously, but they do provide 
+        a good starting point for those looking to make their own rocket nozzle!
+        <br> 
+        <h2> Background: </h2>
+        Coverging-Diverging Nozzles go by many different names, like Contour, Bell, or De Laval nozzle. 
+        They all mean essentially the same thing: there is a converging, throat, and diverging section to the nozzle. 
+        The converging section is where the gas is in the subsonic range, the throat is where the gas reaches its sonic velocity, and the 
+        diverging section is where the gas is in the supersonic range. You can start learning more about the basics of nozzles <a href="https://www.grc.nasa.gov/www/k-12/airplane/nozzled.html">here</a>
+        <br> 
+        More specifically, the <a href="http://seitzman.gatech.edu/classes/ae6450/nozzle_geometries.pdf"> approzimate optimization approuch </a> 
+        in combination with the <a href="http://mae-nas.eng.usu.edu/MAE_5540_Web/propulsion_systems/section8/section.8.1.pdf">method of characteristics </a> is used to generate nozzles through this website. This project is open source,
+        so the full code can be viewed <a href=""> here </a>. 
+        <br>
+        <h2> How To Use: </h2>
+        Input nozzle specifications. Use either thrust or mass flow rate, both are not necessary. Make sure to use realistic parameters
+        or the program won't work! To use default parameters click below. 
+        <br>
+        <div style="padding: 10px 0px"> 
+            <button onclick="defaultParameters()"> Default Parameters </button>
+        </div>
+    </p> 
+
+    <form action="#" method="POST" name="form">
+        <label for="chamberPressure">Chamber Pressure:</label><br>
+            <input type="number" id="chamberPressure" name="chamberPressure"><br><br>
+        <label for="chamberTemperature">Chamber Temperature:</label><br>
+            <input type="number" id="chamberTemperature" name="chamberTemperature"><br><br>
+        <label for="thrust">Thrust:</label><br>
+            <input type="number" id="thrust" name="thrust"><br><br>
+        <label for="mdot">Mass Flow Rate:</label><br>
+            <input type="number" id="mdot" name="mdot"><br><br>
+        <label for="altitude">Altitude:</label><br>
+            <input type="number" id="altitude" name="altitude"><br><br>
+        <label for="gamma">Gamma:</label><br>
+            <input step=0.1 type="number" id="gamma" name="gamma"><br><br>
+        <label for="throatRadius">Throat Radius:</label><br>
+            <input type="number" id="throatRadius" name="throatRadius"><br><br>
+        <label for="chamberRadius">Chamber Radius:</label><br>
+            <input type="number" id="chamberRadius" name="chamberRadius"><br><br>
+    </form>
+    {% if nozzleLoaded == 0 %}
+        <button onclick="required()">Generate</button>
+    {% endif %}
+    {% if nozzleLoaded == 1%}
+    <a href="generatedNozzle.stl" download>
+        <button> Download </button>
+    </a>
+    {% endif %}
+    <p> 
+        This website was made by <a href="http://sloansobie.com"> Sloan Sobie </a> with contributions from <a href="https://team-aero.itch.io/design-and-flow-analysis-of-bell-nozzle">K. Harsha Vardhan, Siddhanth Thakuri, B. Akhil Goud, and U. Rajendar. </a>
+    </p>
+    <script>
+        function required() { 
+            if (
+                form.chamberPressure.value.length == 0 ||
+                form.chamberTemperature.value.length == 0 ||
+                form.altitude.value.length == 0 ||
+                form.gamma.value.length == 0 ||
+                form.throatRadius.value.length == 0 ||
+                form.chamberRadius.value.length == 0 || 
+                form.mdot.value.length == 0 && form.thrust.value.length == 0
+                ){
+                    alert('input parameter(s) invalid'); 
+                    return
+            } else {
+                if (form.mdot.value.length == 0){
+                    form.mdot.value = 0
+                }
+                if (form.thrust.value.length == 0){
+                    form.thrust.value = 0
+                }
+                form.submit();
+            }
+        }
+
+        function defaultParameters() {
+            form.chamberPressure.value = 2270000
+            form.chamberTemperature.value = 1200
+            form.altitude.value = 7500
+            form.gamma.value = 1.4
+            form.throatRadius.value = 35
+            form.chamberRadius.value = 50
+            form.thrust.value = 4000
+        }
+    </script>
+</body>
+
+</html>
